@@ -3,7 +3,6 @@ package avm.io.travel.service.impl;
 
 import avm.io.travel.dto.TravelDTO;
 import avm.io.travel.exception.BadEndDateException;
-import avm.io.travel.persistance.entity.Travel;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -34,18 +33,30 @@ public class TravelTests {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    private static TravelDTO travel;
+    private static  Calendar startCal;
+    private static  Calendar endCal;
 
 
     @BeforeClass
     public static void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+
+        travel = new TravelDTO();
+        travel.setTitle("London 2K20");
+        startCal = Calendar.getInstance();
+        startCal.set(2020,10,8);
+        travel.setStartDate(startCal);
+        endCal = Calendar.getInstance();
+        endCal.set(2020,10,13);
+        travel.setEndDate(endCal);
     }
 
-  /*  @After
+    @After
     public void tearDown() throws Exception{
-
-    }*/
+        service.deleteAll();
+    }
 
 
 
@@ -53,21 +64,8 @@ public class TravelTests {
     @Test
     public void createTravel() {
 
-        TravelDTO travel = new TravelDTO();
-        travel.setTitle("London 2K20");
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2020,10,8);
-        travel.setStartDate(startCal);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2020,10,11);
-
-        travel.setEndDate(endCal);
-
         TravelDTO result = service.save(travel);
-
         assertEquals(travel.getTitle(), result.getTitle());
-
     }
 
     @Test
@@ -75,9 +73,7 @@ public class TravelTests {
 
         TravelDTO travel = new TravelDTO();
         travel.setTitle("Amsterdam");
-
         Set<ConstraintViolation<TravelDTO>> constraintViolations = validator.validate(travel);
-
         assertEquals(2, constraintViolations.size());
         assertEquals("ne doit pas être nul", constraintViolations.iterator().next().getMessage());
 
@@ -100,44 +96,18 @@ public class TravelTests {
 
     @Test
     public void testFindOne() {
-        TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K20");
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2021,10,8);
-        travel.setStartDate(startCal);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2021,10,11);
-
-        travel.setEndDate(endCal);
 
         TravelDTO toronto = service.save(travel);
-
         TravelDTO result = service.show(toronto.getId());
-
         assertEquals(toronto.getId(), result.getId());
     }
 
     @Test
     public void testDeleteById() {
 
-        TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K22");
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2021,10,8);
-        travel.setStartDate(startCal);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2021,10,11);
-
-        travel.setEndDate(endCal);
-
         TravelDTO saveResult = service.save(travel);
-
         List<TravelDTO> travelDTOs = service.list();
-
         assertEquals(1, travelDTOs.size());
-
         service.deleteById(saveResult.getId());
         travelDTOs = service.list();
         assertEquals(0, travelDTOs.size());
@@ -147,59 +117,27 @@ public class TravelTests {
     @Test
     public void testGetTravels() {
 
-        TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K21");
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2021,10,8);
-        travel.setStartDate(startCal);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2021,10,11);
-
-        travel.setEndDate(endCal);
-
         service.save(travel);
-
         List<TravelDTO> travelDTOs = service.list();
-
         assertEquals(1, travelDTOs.size());
     }
 
     @Test
     public void testDeleteAll() {
 
-        TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K21");
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2021,10,8);
-        travel.setStartDate(startCal);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2021,10,11);
-
-        travel.setEndDate(endCal);
-
         service.save(travel);
 
         travel.setTitle("Montreal 2K22");
-
         startCal.set(2022,10,8);
         travel.setStartDate(startCal);
-
         endCal.set(2022,10,11);
-
         travel.setEndDate(endCal);
-
         service.save(travel);
 
         List<TravelDTO> travelDTOs = service.list();
-
         assertEquals(2, travelDTOs.size());
-
         service.deleteAll();
-
         travelDTOs = service.list();
-
         assertEquals(0, travelDTOs.size());
     }
 }
