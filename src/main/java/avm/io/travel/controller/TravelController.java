@@ -1,13 +1,11 @@
 package avm.io.travel.controller;
 
 import avm.io.travel.dto.TravelDTO;
-import avm.io.travel.persistance.entity.Travel;
 import avm.io.travel.service.ITravelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/travels")
@@ -19,6 +17,26 @@ public class TravelController {
     @RequestMapping(method = RequestMethod.POST)
     public TravelDTO save(@RequestBody TravelDTO travel) {
         return service.save(travel);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public TravelDTO show(@PathVariable long id) {
+        return service.show(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<TravelDTO> list() {
+        return service.list();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteAll() {
+        service.deleteAll();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public void deleteById(@PathVariable long id) {
+        service.deleteById(id);
     }
 
 
