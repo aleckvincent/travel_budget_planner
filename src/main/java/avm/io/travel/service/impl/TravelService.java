@@ -62,4 +62,20 @@ public class TravelService implements ITravelService {
         }
         return travels;
     }
+
+    @Override
+    public void deleteById(long id) {
+
+        TravelDTO travel = this.show(id);
+
+        if (travel != null) {
+            repository.deleteById(id);
+        }
+
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

@@ -101,7 +101,7 @@ public class TravelTests {
     @Test
     public void testFindOne() {
         TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K21");
+        travel.setTitle("Toronto 2K20");
         Calendar startCal = Calendar.getInstance();
         startCal.set(2021,10,8);
         travel.setStartDate(startCal);
@@ -118,11 +118,11 @@ public class TravelTests {
         assertEquals(toronto.getId(), result.getId());
     }
 
-  /*  @Test
-    public void testDeleteAll() {
+    @Test
+    public void testDeleteById() {
 
         TravelDTO travel = new TravelDTO();
-        travel.setTitle("Toronto 2K21");
+        travel.setTitle("Toronto 2K22");
         Calendar startCal = Calendar.getInstance();
         startCal.set(2021,10,8);
         travel.setStartDate(startCal);
@@ -132,11 +132,17 @@ public class TravelTests {
 
         travel.setEndDate(endCal);
 
+        TravelDTO saveResult = service.save(travel);
+
         List<TravelDTO> travelDTOs = service.list();
 
         assertEquals(1, travelDTOs.size());
 
-    }*/
+        service.deleteById(saveResult.getId());
+        travelDTOs = service.list();
+        assertEquals(0, travelDTOs.size());
+
+    }
 
     @Test
     public void testGetTravels() {
@@ -157,5 +163,43 @@ public class TravelTests {
         List<TravelDTO> travelDTOs = service.list();
 
         assertEquals(1, travelDTOs.size());
+    }
+
+    @Test
+    public void testDeleteAll() {
+
+        TravelDTO travel = new TravelDTO();
+        travel.setTitle("Toronto 2K21");
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(2021,10,8);
+        travel.setStartDate(startCal);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(2021,10,11);
+
+        travel.setEndDate(endCal);
+
+        service.save(travel);
+
+        travel.setTitle("Montreal 2K22");
+
+        startCal.set(2022,10,8);
+        travel.setStartDate(startCal);
+
+        endCal.set(2022,10,11);
+
+        travel.setEndDate(endCal);
+
+        service.save(travel);
+
+        List<TravelDTO> travelDTOs = service.list();
+
+        assertEquals(2, travelDTOs.size());
+
+        service.deleteAll();
+
+        travelDTOs = service.list();
+
+        assertEquals(0, travelDTOs.size());
     }
 }

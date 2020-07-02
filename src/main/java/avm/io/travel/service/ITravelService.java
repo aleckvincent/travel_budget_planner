@@ -6,9 +6,15 @@ import java.util.List;
 
 public interface ITravelService {
 
-    public TravelDTO save(TravelDTO travel);
+    TravelDTO save(TravelDTO travel);
 
-    public TravelDTO show(long id);
+    TravelDTO show(long id);
 
-    public List<TravelDTO> list();
+    List<TravelDTO> list();
+
+    void deleteById(long id);
+
+    void deleteAll();
+
+
 }
